@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yay! 💕</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body {
+      background-color: #FEEAF3;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .message-box {
+      position: relative;
+      z-index: 10;
+      background: rgba(240, 176, 200, 0.78);
+      border-radius: 2.5rem;
+      box-shadow: 0 8px 32px rgba(178, 153, 110, 0.22);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3.5rem 3rem;
+      width: 85vw;
+      max-width: 650px;
+      margin: 2rem;
+    }
+    .message-box h1 {
+      font-size: 2.8rem;
+      font-weight: bold;
+      color: #8B5A6B;
+      text-align: center;
+      margin: 0 0 1.2rem 0;
+      font-family: 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .message-box .love-text {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #7A4A5A;
+      text-align: center;
+      margin: 0 0 1rem 0;
+      font-family: 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    }
+    .message-box .mwah-text {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #8B5A6B;
+      text-align: center;
+      margin: 0 0 1.8rem 0;
+      font-family: 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+    }
+    .message-box .heart-img {
+      display: block;
+      max-width: 140px;
+      height: auto;
+    }
+    .message-box .heart-inline {
+      display: inline-block;
+      width: 1.1em;
+      height: 1.1em;
+      vertical-align: middle;
+    }
+    .heart-scatter {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .heart-scatter img {
+      position: absolute;
+      object-fit: contain;
+      will-change: transform;
+      animation: float-soft var(--dur, 5s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes float-soft {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0) rotate(var(--rot)); }
+      50% { transform: translate(-50%, -50%) translateY(-6px) rotate(var(--rot)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="heart-scatter" id="heart-scatter"></div>
+  <div class="message-box">
+    <h1>YAYAYAYAYAYAYAY!!</h1>
+    <p class="love-text">I LOVE YOU SO VERY MUCH JUANNE <BR> AND ILL BE LOVING YOU FOREVER MWEHEHHEHEHEHEHE <img src="khert.png" alt="" class="heart-inline" aria-hidden="true"></p>
+    <p class="mwah-text">MWAH  MWAH MWAH <img src="khert.png" alt="" class="heart-inline" aria-hidden="true"></p>
+    <img src="khert.png" alt="" class="heart-img" aria-hidden="true">
+  </div>
+
+  <script>
+    (function() {
+      const IMAGES = ['2heart.png', 'bearheart.png', 'brownheart.png', 'koheart.png', 'heart.png'];
+      const container = document.getElementById('heart-scatter');
+      const gap = 16;
+      const baseSize = 144;
+      const cellSize = baseSize + gap;
+      const maxOffset = 12;
+      const scaleMin = 0.92;
+      const scaleMax = 1.08;
+      const rotationRange = 18;
+
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const cols = Math.ceil(vw / cellSize) + 1;
+      const rows = Math.ceil(vh / cellSize) + 1;
+
+      const grid = [];
+      for (let row = 0; row < rows; row++) {
+        grid[row] = [];
+        let prevImageIndex = -1;
+        for (let col = 0; col < cols; col++) {
+          const excluded = [prevImageIndex];
+          if (row > 0) {
+            excluded.push(grid[row - 1][col]);
+            if (col > 0) excluded.push(grid[row - 1][col - 1]);
+            if (col < cols - 1) excluded.push(grid[row - 1][col + 1]);
+          }
+          const excludedSet = new Set(excluded.filter(i => i >= 0));
+          const valid = IMAGES.map((_, i) => i).filter(i => !excludedSet.has(i));
+          const imageIndex = valid.length > 0
+            ? valid[Math.floor(Math.random() * valid.length)]
+            : Math.floor(Math.random() * IMAGES.length);
+          prevImageIndex = imageIndex;
+          grid[row][col] = imageIndex;
+
+          const img = document.createElement('img');
+          img.src = IMAGES[imageIndex];
+          img.alt = '';
+          img.setAttribute('aria-hidden', 'true');
+
+          const cellCenterX = col * cellSize + cellSize / 2;
+          const cellCenterY = row * cellSize + cellSize / 2;
+          const offsetX = (Math.random() - 0.5) * 2 * maxOffset;
+          const offsetY = (Math.random() - 0.5) * 2 * maxOffset;
+          const left = cellCenterX + offsetX;
+          const top = cellCenterY + offsetY;
+
+          const scale = scaleMin + Math.random() * (scaleMax - scaleMin);
+          const size = baseSize * scale;
+          const rotation = (Math.random() - 0.5) * 2 * rotationRange;
+          const opacity = 0.55 + Math.random() * 0.25;
+
+          img.style.left = left + 'px';
+          img.style.top = top + 'px';
+          img.style.width = size + 'px';
+          img.style.height = size + 'px';
+          img.style.setProperty('--rot', rotation + 'deg');
+          img.style.setProperty('--dur', (4.5 + Math.random() * 3) + 's');
+          img.style.setProperty('--delay', (Math.random() * -5) + 's');
+          img.style.opacity = opacity;
+
+          container.appendChild(img);
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
