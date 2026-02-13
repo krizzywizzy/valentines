@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will you be my Valentine?</title>
+  <style>
+    :root {
+      --brown: #B2996E;
+      --cream: #FFF8E1;
+      --beige: #F5E5C0;
+      --pink: #FFD6DE;
+      --shadow-lg: 0 8px 32px rgba(178,153,110,0.18);
+      --shadow-sm: 0 2px 12px rgba(178,153,110,0.09);
+      --border-radius: 2.5rem;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      background: url('bg.jpg') center center / cover no-repeat fixed;
+      font-family: 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      min-width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .valentine-container {
+      background: rgba(250, 250, 250, 0.74);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2.68rem 1.87rem 2.14rem 1.87rem;
+      width: 96vw;
+      max-width: 439px;
+      margin: 1.6rem;
+    }
+
+    .valentine-headline {
+      font-size: 2.57rem;
+      font-weight: bold;
+      color: var(--brown);
+      text-align: center;
+      margin-bottom: 2.35rem;
+      letter-spacing: 0.03em;
+      text-shadow: 0 6px 20px #fff7, 0 1px 0 var(--beige);
+    }
+    .valentine-buttons {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 2.35rem;
+      margin-top: 0.64rem;
+    }
+
+    .button-wrapper {
+      flex: 1 1 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-width: 128px;
+    }
+    .button-wrapper.no-btn-wrapper {
+      overflow: hidden;
+    }
+
+    /* YES BUTTON & FLOATING HEARTS - surround button, show on hover */
+    .yes-hearts {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .button-wrapper:hover .yes-hearts {
+      opacity: 1;
+    }
+    .yes-heart {
+      position: absolute;
+      font-size: 1.23rem;
+      animation: float-heart 2.25s infinite cubic-bezier(0.6,0,0.7,1);
+    }
+    .yes-heart:nth-child(1) { top: 0; left: 50%; margin-left: -0.6em; animation-delay: 0s; }
+    .yes-heart:nth-child(2) { top: 12%; right: 0; animation-delay: .3s; }
+    .yes-heart:nth-child(3) { bottom: 12%; right: 0; animation-delay: .6s; }
+    .yes-heart:nth-child(4) { bottom: 0; left: 50%; margin-left: -0.6em; animation-delay: .2s; }
+    .yes-heart:nth-child(5) { top: 12%; left: 0; animation-delay: .5s; }
+    @keyframes float-heart {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-8px) scale(1.1); }
+    }
+    .yes-btn {
+      background: linear-gradient(135deg,var(--pink) 80%,#ffe7ea 100%);
+      color: var(--brown);
+      font-size: 1.44rem;
+      padding: 0.91em 1.71em;
+      margin-top: 2.25rem;
+      border: none;
+      border-radius: 2rem;
+      box-shadow: var(--shadow-sm), 0 1.5px 0 rgb(242,182,196,0.18);
+      font-weight: 600;
+      cursor: pointer;
+      position: relative;
+      transition: 
+        transform 170ms cubic-bezier(.78,-0.22,.55,.83),
+        box-shadow 220ms,
+        background 250ms;
+      outline: none;
+    }
+    .yes-btn:hover, .yes-btn:focus {
+      transform: scale(1.07) translateY(-2px) rotate(-1.5deg);
+      box-shadow: 0 8px 32px var(--pink), 0 2px 14px #fcd6e74c;
+      background: linear-gradient(135deg,var(--pink) 60%,#fff5f8 100%);
+    }
+    /* NO BUTTON & SAD CHARACTERS */
+    .no-chars {
+      display: flex;
+      gap: 0.32rem;
+      position: absolute;
+      top: -2.35rem;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      width: 98px;
+      justify-content: center;
+      z-index: 2;
+    }
+    .no-char {
+      font-size: 1.34rem;
+      filter: grayscale(0.55) brightness(1.02) opacity(0.86);
+      transition: filter 0.21s;
+    }
+    .no-btn {
+      background: linear-gradient(135deg,var(--beige) 90%,#fffdf8 100%);
+      color: #a08854;
+      font-size: 1.36rem;
+      padding: 0.86em 1.59em;
+      margin-top: 2.25rem;
+      border: none;
+      border-radius: 2rem;
+      box-shadow: var(--shadow-sm), 0 2px 12px rgba(200,180,160,0.09);
+      font-weight: 500;
+      cursor: pointer;
+      transition:
+        transform 0.5s cubic-bezier(.3,.1,.2,1),
+        opacity 0.4s ease,
+        box-shadow 200ms,
+        background 250ms;
+      outline: none;
+      position: relative;
+      z-index: 3;
+    }
+    .no-btn:hover, .no-btn:focus {
+      background: linear-gradient(135deg,#f7eee4 0%,var(--beige) 100%);
+      color: #937046;
+      transform: scale(0.97) translateY(2px);
+      box-shadow: 0 5px 24px #ecb6b24a, 0 1px 10px #c3b2ba22;
+    }
+    .no-btn.hiding {
+      pointer-events: none;
+    }
+
+    /* MOBILE RESPONSIVE - same layout, scaled down */
+    @media (max-width: 510px) {
+      .valentine-container {
+        max-width: 94vw;
+        padding: 1.6rem 1.07rem 1.34rem 1.07rem;
+      }
+      .valentine-headline {
+        font-size: 1.6rem;
+        margin-bottom: 1.6rem;
+      }
+      .valentine-buttons {
+        flex-direction: row;
+        gap: 1.07rem;
+        margin-top: 0.43rem;
+      }
+      .button-wrapper { min-width: 0; }
+      .yes-btn, .no-btn {
+        font-size: 1.18rem;
+        padding: 0.7em 1.28em;
+        margin-top: 1.6rem;
+      }
+      .yes-hearts {
+        width: 107px;
+        height: 107px;
+      }
+      .yes-heart { font-size: 1.07rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="valentine-container">
+    <div class="valentine-headline">
+      HAII BABYYY <3 <br>
+      Will you be my Valentine? (Forever)
+      <img src="smug.png" alt="Smug face" style="margin-top: 1.1rem; max-width: 110px; display: block; margin-left: auto; margin-right: auto;" aria-hidden="true">
+    </div>
+    <div class="valentine-buttons">
+      <!-- Yes Button with Hearts -->
+      <div class="button-wrapper">
+        <div class="yes-hearts">
+          <span class="yes-heart" aria-hidden="true">💖</span>
+          <span class="yes-heart" aria-hidden="true">💕</span>
+          <span class="yes-heart" aria-hidden="true">❤️‍🔥</span>
+          <span class="yes-heart" aria-hidden="true">💗</span>
+          <span class="yes-heart" aria-hidden="true">💝</span>
+        </div>
+        <button class="yes-btn">Yes</button>
+      </div>
+      <!-- No Button with Rilakkuma-style (Placeholder Bears) -->
+      <div class="button-wrapper no-btn-wrapper">
+        <button class="no-btn">No</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Yes button: bouncy effect, then navigate after 3 second delay
+    document.querySelector('.yes-btn').addEventListener('click', function() {
+      this.style.transition = 'transform 0.15s';
+      this.style.transform = 'scale(1.12)';
+      setTimeout(() => {
+        this.style.transform = '';
+        this.style.transition = '';
+      }, 180);
+      setTimeout(() => {
+        window.location.href = 'yes-page.html';
+      }, 1000);
+    });
+
+    // NO BUTTON - runs away and disappears on click
+    (function() {
+      const btn = document.querySelector('.no-btn');
+      const wrapper = btn.closest('.button-wrapper');
+      let hasRunAway = false;
+
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (hasRunAway) return;
+        hasRunAway = true;
+        btn.classList.add('hiding');
+
+        // Pick a random direction to run off-screen
+        const directions = [
+          { x: 1, y: 0 },   // right
+          { x: -1, y: 0 },  // left
+          { x: 0.7, y: 0.7 },  // bottom-right
+          { x: -0.7, y: 0.7 }, // bottom-left
+        ];
+        const dir = directions[Math.floor(Math.random() * directions.length)];
+        const dist = Math.max(window.innerWidth, window.innerHeight) + 200;
+
+        btn.style.transition = 'transform 0.55s cubic-bezier(.3,.1,.2,1), opacity 0.4s ease 0.2s';
+        btn.style.transform = 'translate(' + (dir.x * dist) + 'px, ' + (dir.y * dist) + 'px) scale(0.8)';
+        btn.style.opacity = '0';
+
+        // Hide fully after animation
+        setTimeout(() => {
+          wrapper.style.visibility = 'hidden';
+          wrapper.style.pointerEvents = 'none';
+        }, 700);
+      });
+    })();
+
+  </script>
+</body>
+</html>
